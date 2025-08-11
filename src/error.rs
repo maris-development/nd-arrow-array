@@ -6,6 +6,8 @@ pub enum NdArrayError {
     BroadcastingError(BroadcastError),
     #[error("Array length: {0} and dimensions: {1:?} don't align.")]
     MisalignedArrayDimensions(usize, Dimensions),
+    #[error("Arrow Error: {0}")]
+    Arrow(#[from] arrow::error::ArrowError),
 }
 
 #[derive(Debug, thiserror::Error)]

@@ -4,6 +4,7 @@ use arrow::array::ArrayRef;
 
 use crate::{dimensions::Dimensions, error::NdArrayError};
 
+pub mod batch;
 pub mod broadcast;
 pub mod dimensions;
 pub mod error;
