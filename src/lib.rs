@@ -1,6 +1,9 @@
-use std::ops::Deref;
+use std::{ops::Deref, sync::Arc};
 
-use arrow::array::ArrayRef;
+use arrow::{
+    array::{ArrayRef, NullArray, new_null_array},
+    datatypes::DataType,
+};
 
 use crate::{dimensions::Dimensions, error::NdArrayError};
 
@@ -15,6 +18,16 @@ pub struct NdArrowArray {
 }
 
 impl NdArrowArray {
+    pub fn new_null_scalar(data_type: Option<DataType>) -> Self {
+        match data_type {
+            Some(data_type) => {
+                let array = new_null_array(&data_type, 1);
+                Self::new(array, Dimensions::Scalar).unwrap()
+            }
+            None => Self::new(Arc::new(NullArray::new(1)), Dimensions::Scalar).unwrap(),
+        }
+    }
+
     pub fn new(arrow_array: ArrayRef, dimensions: Dimensions) -> Result<Self, NdArrayError> {
         // Validate the dimensions against the array shape
         if arrow_array.len() != dimensions.total_flat_size() {
