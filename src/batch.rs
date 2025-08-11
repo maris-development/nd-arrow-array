@@ -5,6 +5,7 @@ use arrow::{
 
 use crate::{NdArrowArray, broadcast::broadcast_arrays, error::NdArrayError};
 
+#[derive(Debug, Clone)]
 pub struct NdRecordBatch {
     schema: SchemaRef,
     arrays: Vec<NdArrowArray>,

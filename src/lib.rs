@@ -12,6 +12,7 @@ pub mod broadcast;
 pub mod dimensions;
 pub mod error;
 
+#[derive(Debug, Clone)]
 pub struct NdArrowArray {
     arrow_array: ArrayRef,
     dimensions: Dimensions,
