@@ -1,8 +1,8 @@
 [package]
 name = "nd-arrow-array"
-version = "1.0.0"
+version = "1.2.0"
 edition = "2024"
 
 [dependencies]
-arrow = "=53"
+arrow = "=55"
 thiserror = "2.0"
