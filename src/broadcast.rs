@@ -5,6 +5,10 @@ use arrow::array::{Array, ArrowPrimitiveType, Int8Array, PrimitiveArray};
 use crate::{NdArrowArray, dimensions::Dimensions, error::BroadcastError};
 
 pub fn broadcast_arrays(arrays: &[NdArrowArray]) -> Result<Vec<NdArrowArray>, BroadcastError> {
+    if arrays.is_empty() {
+        return Ok(vec![]);
+    }
+
     let dimensions = arrays
         .iter()
         .map(|a| a.dimensions().clone())
