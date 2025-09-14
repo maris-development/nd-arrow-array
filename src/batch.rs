@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use arrow::{
     array::{ArrayRef, RecordBatch},
     datatypes::{Field, Schema, SchemaRef},
@@ -13,6 +15,12 @@ pub struct NdRecordBatch {
 
 impl NdRecordBatch {
     pub fn new(fields: Vec<Field>, arrays: Vec<NdArrowArray>) -> Result<Self, NdArrayError> {
+        assert_eq!(
+            fields.len(),
+            arrays.len(),
+            "Number of fields must match number of arrays"
+        );
+
         Ok(Self {
             schema: Schema::new(fields).into(),
             arrays,
@@ -27,6 +35,10 @@ impl NdRecordBatch {
         &self.arrays
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.arrays.is_empty()
+    }
+
     pub fn to_arrow_record_batch(&self) -> Result<RecordBatch, NdArrayError> {
         // Broadcast the arrays
         let broadcast_arrays =
@@ -37,7 +49,25 @@ impl NdRecordBatch {
             .map(|a| a.as_arrow_array().clone())
             .collect();
 
+        if arrow_arrays.is_empty() {
+            return Ok(RecordBatch::new_empty(Arc::new(Schema::empty())));
+        }
+
         // Create new record batch
-        Ok(RecordBatch::try_new(self.schema(), arrow_arrays)?)
+        Ok(RecordBatch::try_new(self.schema(), arrow_arrays).unwrap())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_name() {
+        let nd_batch = NdRecordBatch::new(vec![], vec![]).unwrap();
+
+        let flat = nd_batch.to_arrow_record_batch().unwrap();
+
+        println!("{:?}", flat);
     }
 }
