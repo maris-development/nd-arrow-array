@@ -7,7 +7,7 @@ pub enum NdArrayError {
     #[error("Array length: {0} and dimensions: {1:?} don't align.")]
     MisalignedArrayDimensions(usize, Dimensions),
     #[error("Arrow Error: {0}")]
-    Arrow(#[from] arrow::error::ArrowError),
+    Arrow(#[from] crate::arrow::error::ArrowError),
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -15,7 +15,7 @@ pub enum BroadcastError {
     #[error("Incompatible array shapes: {0:?} and {1:?}")]
     IncompatibleShapes(Dimensions, Dimensions),
     #[error("Unsupport data type for broadcasting: {0:?}")]
-    UnsupportedArrowDataType(arrow::datatypes::DataType),
+    UnsupportedArrowDataType(crate::arrow::datatypes::DataType),
     #[error("Cannot find a broadcastable shape for the following dimensions: {0:?}")]
     NoBroadcastableShape(Vec<Dimensions>),
 }

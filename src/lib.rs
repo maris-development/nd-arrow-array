@@ -1,6 +1,23 @@
 use std::{ops::Deref, sync::Arc};
 
-use arrow::{
+#[cfg(feature = "arrow-56")]
+pub use arrow_56 as arrow;
+#[cfg(feature = "arrow-57")]
+pub use arrow_57 as arrow;
+#[cfg(feature = "arrow-58")]
+pub use arrow_58 as arrow;
+
+// Exactly one arrow version must be selected.
+#[cfg(not(any(feature = "arrow-56", feature = "arrow-57", feature = "arrow-58")))]
+compile_error!("Enable exactly one arrow feature: `arrow-56`, `arrow-57`, or `arrow-58`.");
+#[cfg(any(
+    all(feature = "arrow-56", feature = "arrow-57"),
+    all(feature = "arrow-56", feature = "arrow-58"),
+    all(feature = "arrow-57", feature = "arrow-58"),
+))]
+compile_error!("The arrow version features are mutually exclusive; enable only one.");
+
+use crate::arrow::{
     array::{ArrayRef, NullArray, new_null_array},
     datatypes::DataType,
 };

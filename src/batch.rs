@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use arrow::{
+use crate::arrow::{
     array::{ArrayRef, RecordBatch},
     datatypes::{Field, Schema, SchemaRef},
 };

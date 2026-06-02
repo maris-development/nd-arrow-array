@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
-use arrow::array::{Array, ArrowPrimitiveType, Int8Array, PrimitiveArray};
+use crate::arrow;
+use crate::arrow::array::{Array, ArrowPrimitiveType, Int8Array, PrimitiveArray};
 
 use crate::{NdArrowArray, dimensions::Dimensions, error::BroadcastError};
 
